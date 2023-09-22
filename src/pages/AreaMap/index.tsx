@@ -306,11 +306,16 @@ const Map: FC<Props> = ({ levelObj, setLevelObj }) => {
             Object.entries(areaSvg).forEach((item) => {
               if (item[0] === levelObj.provinceCode) {
                 if (levelObj.cityCode) {
-                  return setLevelObj({
-                    provinceCode: levelObj.provinceCode,
-                    cityCode: undefined,
-                    areaCode: item[0],
-                    areaName: item[1],
+                  dynamicLoadGeo({ code: item[0], name: item[1] }).then((e) => {
+                    if (Object.entries(e.geoCoordMap).length > 0) {
+                      setLevelObj({
+                        provinceCode: levelObj.provinceCode,
+                        cityCode: undefined,
+                        areaCode: item[0],
+                        areaName: item[1],
+                        convertData: e.convertData
+                      });
+                    }
                   });
                 } else {
                   return setLevelObj({
